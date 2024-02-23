@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import StartScreen from './StartScreen';
 import { SiHappycow } from "react-icons/si";
 
 const GameScreen = () => {
@@ -8,6 +9,8 @@ const GameScreen = () => {
   const [selectedAnswer, setSelectedAnswer] = useState('');
   const [answers, setAnswers] = useState([]);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const totalQuestions = 20;
 
   const shuffleArray = (array) => {
     const shuffledArray = array.slice(); 
@@ -53,27 +56,48 @@ const GameScreen = () => {
       { question: questions[currentQuestionIndex].question, answer, isCorrect }
     ]);
 
+    if (isCorrect) {
+      setCorrectAnswersCount(prevCount => prevCount + 1);
+    }
+
     setTimeout(() => {
       setShowFeedback(false);
       if (currentQuestionIndex + 1 < questions.length) {
         setCurrentQuestionIndex(prevIndex => prevIndex + 1);
         setSelectedAnswer('');
+      } else {
+        handleEndGame();
       }
     }, 2000);
   };
 
+  const handleEndGame = () => {
+    const hasPassed = correctAnswersCount >= 15;
+
+    if (hasPassed) { 
+      alert(`כל הכבוד! עברת את המשחק! ענית על ${correctAnswersCount} שאלות נכונות מתוך ${totalQuestions}.`);
+    } else {
+      alert(`לצערנו, לא עברת את המשחק. ענית על ${correctAnswersCount} שאלות נכונות מתוך ${totalQuestions}.`);
+    
+    }
+  };
+
+
+
+
+
   return (
     <div className="App">
-      <h1 > שאלות ותשובות</h1>
+      <h1>שאלות ותשובות</h1>
       {questions.length > 0 && (
         <div>
-          <h2>שאלה {currentQuestionIndex + 1} מתוך {questions.length}</h2>
-          <h3>{questions[currentQuestionIndex].question} <span>{<SiHappycow  style={{ color:'#ffcc00' }}/>}</span></h3>
+          <h2>שאלה {currentQuestionIndex + 1} מתוך {totalQuestions}</h2>
+          <h3>{questions[currentQuestionIndex].question} <span><SiHappycow style={{ color:'#ffcc00' }} /></span></h3>
 
           <ul>
             {shuffleArray(questions[currentQuestionIndex].answers).map((answer, index) => (
               <li key={index}>
-                <button onClick={() => handleAnswerSelect(answer)}>{answer}</button>
+                <button onClick={() => handleAnswerSelect(answer)} >{answer}</button>
               </li>
             ))}
           </ul>

@@ -4,6 +4,7 @@ import StartScreen from './StartScreen';
 
 
 
+
 const App = () => {
   const [gameStarted, setGameStarted] = useState(false);
 
