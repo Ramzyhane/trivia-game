@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import GameScreen from './GameScreen';
 import StartScreen from './StartScreen';
+import OffGameScreen from './OffGameScreen';
+
+
 
 
 
@@ -13,13 +17,15 @@ const App = () => {
   };
 
   return (
-    <div className="app">
-      {gameStarted ? (
-        <GameScreen />
-      ) : (
-        <StartScreen onStartGame={startGame} />
-      )}
-    </div>
+    <Router>
+      <div className="app">
+        <Routes>
+          <Route path='/' element={<StartScreen/>}/>
+          <Route path='/GameScreen' element={<GameScreen/>}/>
+          <Route path='/OffGameScreen' element={<OffGameScreen/>}/>
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
